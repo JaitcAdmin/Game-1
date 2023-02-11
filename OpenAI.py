@@ -10,7 +10,7 @@ if not os.path.exists('log_bot.txt'):
         pass
 
 bot = telebot.TeleBot("5708223380:AAHur366QF0R-ZrIwaWSDNUsOWUAK0GYHTM")
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 @bot.message_handler(commands=["start"])
