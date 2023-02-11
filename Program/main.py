@@ -100,11 +100,8 @@ class Main:
 try:
     m = Main()
     map = Map(m, m.FPS)
-    print(map.mapa)
-    print("\n" * 5)
-    print(m.walls)
     m.walls = map.mapa
-    m.draw()git 
+    m.draw()
     for x in range(0, 32):
         for y in range(0, 14):
             if m.walls[y][x] == 5:
@@ -145,4 +142,4 @@ else:
                   " рекомендуется бросить эту вонючую \n"
                   " затею и позвони на телефон поддержки!!!"))
 
-#Hello GitHub
+# Hello GitHub
