@@ -102,6 +102,7 @@ try:
     map = Map(m, m.FPS)
     m.walls = map.mapa
     m.draw()
+    k1 = Knight(60, 60, 1, 0, m.FPS, m, 5, m.walls, 10)
     for x in range(0, 32):
         for y in range(0, 14):
             if m.walls[y][x] == 5:
