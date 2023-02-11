@@ -36,7 +36,6 @@ class Map(Sprite):
         a = np.array(list)
         arr = np.reshape(a, (-1, w))
         arr2 = arr.tolist()
-        arr3 = []
         for i in range(0, len(arr2)):
             for y in range(0, len(arr2[i])):
                 arr2[i][y] = int(arr2[i][y])
