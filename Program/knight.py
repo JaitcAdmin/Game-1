@@ -15,7 +15,7 @@ class Knight(Sprite):
                               PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Option\\h22.png")]
         self.start_health = health
         self.map = map
-        self.none = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Option\\none.png")
+        self.none = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Option\\h0.png")
         self.health_nom = 1
         self.ItFire = False
         self.IsStartDie = False

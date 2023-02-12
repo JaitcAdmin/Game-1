@@ -4,11 +4,8 @@ import numpy as np
 
 
 class Map(Sprite):
-    def __init__(self, m, FPS):
-        file_num = open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "r")
-        num = file_num.read()
-        file_num.close()
-        self.mapa = self.make(self.maps(num), 32)
+    def __init__(self, m, FPS, level):
+        self.map = self.make(self.maps(level), 32)
         self.y = 0
         self.canvas = m.canvas
         self.m = m

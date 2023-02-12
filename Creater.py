@@ -2,7 +2,26 @@ from tkinter import *
 import numpy as np
 
 global color
-color = 1
+color = 5
+global lives
+lives = 10
+global name
+name = ""
+global bol
+bol = True
+
+
+def get_lives():
+    global lives
+    lives = int(en1.get())
+    print(f"lives = {lives}")
+
+
+def get_name():
+    global name
+    name = en2.get()
+    tk.title(name)
+    print(f"name = {name}")
 
 
 def get_grass():
@@ -25,6 +44,17 @@ def get_lava():
     color = 3
 
 
+def get_brick():
+    global color
+    color = 4
+
+
+def get_spawnpoint(bol1=bol):
+    global color
+    color = 5
+    btn[6].place(x=2000, y=2000)
+
+
 def save(w):
     a = " "
     for i in w:
@@ -36,11 +66,14 @@ def save(w):
         a += "] "
     with open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "r") as f:
         num = int(f.read())
-        with open(f"D:\\Python\\Games\\Game 1\\Maps\\{num + 1}.txt", "w") as u:
+        with open(f"D:\\Python\\Games\\Game 1\\Maps\\{num}.txt", "w") as u:
             u.write(a)
         with open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "w") as k:
             k.write(str(num + 1))
-
+        with open(f"D:\\Python\\Games\\Game 1\\Maps\\lives_{num}", "w") as c:
+            c.write(str(lives))
+        with open(f"D:\\Python\\Games\\Game 1\\Maps\\name_{num}", "w") as c:
+            c.write(name)
 
 
 def maps(nom):
@@ -58,7 +91,6 @@ def make(list, w):
     a = np.array(list)
     arr = np.reshape(a, (-1, w))
     arr2 = arr.tolist()
-    arr3 = []
     for i in range(0, len(arr2)):
         for y in range(0, len(arr2[i])):
             arr2[i][y] = int(arr2[i][y])
@@ -76,15 +108,19 @@ def draw(canvas, walls, images):
             canvas.create_line(0, x * 60, 1920, x * 60)
 
 
-def change(event):
-    print(len(walls))
-    for i in range(0, len(walls)):
-        for j in range(0, len(walls[i])):
-            if event.x >= j * 60 and event.x <= (j * 60) + 60 and event.y >= i * 60 and event.y <= (i * 60) + 60:
-                walls[i][j] = 1
-                canvas.create_image(j * 60, i * 60, image=images[color], anchor=NW)
-                canvas.create_line(j * 60, 0, j * 60, 840)
-                canvas.create_line(0, i * 60, 1920, i * 60)
+def change(event, bolu=bol):
+    if event.y <= 820:
+        for i in range(0, len(walls)):
+            for j in range(0, len(walls[i])):
+                if event.x >= j * 60 and event.x <= (j * 60) + 60 and event.y >= i * 60 and event.y <= (i * 60) + 60:
+                    walls[i][j] = color
+                    if color == 5 and bolu:
+                        canvas.create_image(j * 60 + 90, i * 60 + 60, image=images[5], anchor=SE)
+                        bolu = False
+                    else:
+                        canvas.create_image(j * 60, i * 60, image=images[color], anchor=NW)
+                    canvas.create_line(j * 60, 0, j * 60, 840)
+                    canvas.create_line(0, i * 60, 1920, i * 60)
 
 
 tk = Tk()
@@ -100,6 +136,9 @@ with open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "r") as f:
 
 for x in range(0, len(walls)):
     for y in range(0, len(walls[x])):
+        walls[x][y] = 4
+for x in range(1, len(walls) - 1):
+    for y in range(1, len(walls[x]) - 1):
         walls[x][y] = 0
 
 images = [
@@ -108,10 +147,11 @@ images = [
     PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m3.png"),
     PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m4.png"),
     PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Walls\\2.png"),
-    PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\grass\\6.png")
+    PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m6.png")
 ]
 
 tk.bind_all("<Button-1>", change)
+tk.bind('<Escape>', lambda e: tk.destroy())
 
 draw(canvas, walls, images)
 btn = [
@@ -119,8 +159,16 @@ btn = [
     Button(tk, text="Песок", command=lambda: get_send()),
     Button(tk, text="Снег", command=lambda: get_snow()),
     Button(tk, text="Лава", command=lambda: get_lava()),
+    Button(tk, text="Стена", command=lambda: get_brick()),
+    Button(tk, text="Название", command=lambda: get_name()),
+    Button(tk, text="Спавн поинт", command=lambda: get_spawnpoint()),
+    Button(tk, text="Кол-во жизней", command=lambda: get_lives()),
     Button(tk, text="Сохранить", command=lambda: save(walls))
 ]
-for i in range(470, len(btn) * 200 + 470, 200):
-    btn[int((i - 470) / 200)].place(x=i, y=950)
+en1 = Entry()
+en1.place(anchor=NW, x=1533, y=900)
+en2 = Entry()
+en2.place(anchor=NW, x=1118, y=900)
+for i in range(150, len(btn) * 200 + 150, 200):
+    btn[int((i - 150) / 200)].place(x=i, y=100)
 tk.mainloop()

@@ -8,12 +8,16 @@ import random
 
 
 class Main:
-    def __init__(self):
+    def __init__(self, level):
+        self.level = level
         self.WIDTH = 1920
         self.HEIGHT = 1080
         self.FPS = 60
         self.tk = Tk()
-        self.tk.title("Assault of Desert")
+        with open(f"D:\\Python\\Games\\Game 1\\Maps\\name_{self.level}", "r") as c:
+            self.tk.title(str(c.read()))
+        with open(f"D:\\Python\\Games\\Game 1\\Maps\\lives_{self.level}", "r") as c:
+            self.lives = int(c.read())
         self.tk.attributes("-topmost", True)
         self.tk.attributes('-fullscreen', True)
         self.tk.resizable(0, 0)
@@ -45,6 +49,7 @@ class Main:
                        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m4.png"),
                        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Walls\\2.png"),
                        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\grass\\1.png")]
+        self.spase_img = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m0.png")
         self.marichuana = [
             PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Decorations\\d11.png"),
             PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Decorations\\d12.png"),
@@ -83,30 +88,38 @@ class Main:
         self.apt = self.canvas.create_image(0, 840, image=self.atp_image, anchor=NW)
         for x in range(0, 32):
             for y in range(0, 14):
-                self.canvas.create_image(x * 60, y * 60, image=self.images[self.walls[y][x]], anchor=NW)
+                print(f"{x}:{y}")
+                if x == 0 and y == 0 or x == 31 and y == 13 or x == 0 and y == 13 or x == 31 and y == 0:
+                    self.canvas.create_image(x * 60, y * 60, image=self.spase_img, anchor=NW)
+                else:
+                    self.canvas.create_image(x * 60, y * 60, image=self.images[self.walls[y][x]], anchor=NW)
         for x in range(0, 32):
             for y in range(0, 14):
-                if int(random.random() * 20) == 9 and self.walls[y][x] != 4:
-                    self.canvas.create_image(x * 60, y * 60,
-                                             image=self.marichuana[int(random.random() * len(self.marichuana))],
-                                             anchor=NW)
+                if int(random.random() * 10) == 9 and self.walls[y][x] != 4:
+                    if x == 0 and y == 0 or x == 31 and y == 13 or x == 0 and y == 13 or x == 31 and y == 0:
+                        pass
+                    else:
+                        self.canvas.create_image(x * 60, y * 60,
+                                                 image=self.marichuana[int(random.random() * len(self.marichuana))],
+                                                 anchor=NW)
 
     def load(self):
         print("Начало сохранения")
-        time.sleep(2)  # To Do#
+        time.sleep(2)  # To Do #
         print("Загруска завершина")
 
 
 try:
-    m = Main()
-    map = Map(m, m.FPS)
-    m.walls = map.mapa
+    m = Main(1)
+    map = Map(m, m.FPS, m.level)
+    m.walls = map.map
     m.draw()
-    k1 = Knight(60, 60, 1, 0, m.FPS, m, 5, m.walls, 10)
+    k1 = Knight(60, 60, 1, 0, m.FPS, m, 5, m.walls, m.lives)
+
     for x in range(0, 32):
         for y in range(0, 14):
             if m.walls[y][x] == 5:
-                k1 = Knight(x * 60 + 25, y * 60 + 25, 1, 0, m.FPS, m, 5, m.walls, 10)
+                k1 = Knight(x * 60 + 25, y * 60 + 25, 1, 0, m.FPS, m, 5, m.walls, m.lives)
     if k1 is None:
         k1 = Knight(1200, 400, 1, 0, m.FPS, m, 5, m.walls, 10)
 
