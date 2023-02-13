@@ -50,7 +50,7 @@ class Main:
                        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Walls\\2.png"),
                        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\grass\\1.png")]
         self.spase_img = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m0.png")
-        self.marichuana = [
+        self.plant = [
             PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Decorations\\d11.png"),
             PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Decorations\\d12.png"),
             PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Decorations\\d20.png"),

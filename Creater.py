@@ -53,6 +53,7 @@ def get_spawnpoint(bol1=bol):
     global color
     color = 5
     btn[6].place(x=2000, y=2000)
+    walls[0][0] = 4
 
 
 def save(w):
@@ -64,16 +65,18 @@ def save(w):
             if y <= len(i) - 2:
                 a += ", "
         a += "] "
+    walls[0][0] = 4
+    draw(canvas, walls, images)
     with open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "r") as f:
         num = int(f.read())
-        with open(f"D:\\Python\\Games\\Game 1\\Maps\\{num}.txt", "w") as u:
-            u.write(a)
-        with open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "w") as k:
-            k.write(str(num + 1))
-        with open(f"D:\\Python\\Games\\Game 1\\Maps\\lives_{num}", "w") as c:
-            c.write(str(lives))
-        with open(f"D:\\Python\\Games\\Game 1\\Maps\\name_{num}", "w") as c:
-            c.write(name)
+    with open(f"D:\\Python\\Games\\Game 1\\Maps\\{num}.txt", "w") as u:
+        u.write(a)
+    with open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "w") as k:
+        k.write(str(num + 1))
+    with open(f"D:\\Python\\Games\\Game 1\\Maps\\lives_{num}", "w") as c:
+        c.write(str(lives))
+    with open(f"D:\\Python\\Games\\Game 1\\Maps\\name_{num}", "w") as c:
+        c.write(name)
 
 
 def maps(nom):
@@ -108,15 +111,15 @@ def draw(canvas, walls, images):
             canvas.create_line(0, x * 60, 1920, x * 60)
 
 
-def change(event, bolu=bol):
+def change(event):
     if event.y <= 820:
         for i in range(0, len(walls)):
             for j in range(0, len(walls[i])):
                 if event.x >= j * 60 and event.x <= (j * 60) + 60 and event.y >= i * 60 and event.y <= (i * 60) + 60:
                     walls[i][j] = color
-                    if color == 5 and bolu:
+                    if color == 5:
                         canvas.create_image(j * 60 + 90, i * 60 + 60, image=images[5], anchor=SE)
-                        bolu = False
+                        get_grass()
                     else:
                         canvas.create_image(j * 60, i * 60, image=images[color], anchor=NW)
                     canvas.create_line(j * 60, 0, j * 60, 840)
@@ -170,5 +173,5 @@ en1.place(anchor=NW, x=1533, y=900)
 en2 = Entry()
 en2.place(anchor=NW, x=1118, y=900)
 for i in range(150, len(btn) * 200 + 150, 200):
-    btn[int((i - 150) / 200)].place(x=i, y=100)
+    btn[int((i - 150) / 200)].place(x=i, y=1000)
 tk.mainloop()
