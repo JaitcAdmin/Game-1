@@ -100,7 +100,7 @@ class Main:
                         pass
                     else:
                         self.canvas.create_image(x * 60, y * 60,
-                                                 image=self.marichuana[int(random.random() * len(self.marichuana))],
+                                                 image=self.plant[int(random.random() * len(self.plant))],
                                                  anchor=NW)
 
     def load(self):
