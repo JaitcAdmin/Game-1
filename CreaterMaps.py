@@ -1,5 +1,6 @@
 from tkinter import *
-import numpy as np
+import pickle
+from Program.map import Map
 
 global color
 color = 5
@@ -67,37 +68,27 @@ def save(w):
         a += "] "
     walls[0][0] = 4
     draw(canvas, walls, images)
-    with open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "r") as f:
-        num = int(f.read())
-    with open(f"D:\\Python\\Games\\Game 1\\Maps\\{num}.txt", "w") as u:
-        u.write(a)
-    with open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "w") as k:
-        k.write(str(num + 1))
-    with open(f"D:\\Python\\Games\\Game 1\\Maps\\lives_{num}", "w") as c:
-        c.write(str(lives))
-    with open(f"D:\\Python\\Games\\Game 1\\Maps\\name_{num}", "w") as c:
-        c.write(name)
+    m = Map(3)
+    m.walls = walls
+    m.health = lives
+    m.name = name
+    k = open(f"D:\\Python\\Games\\Game 1\\Maps\\number.txt", "r")
+    add = int(k.read())
+    print(F"add = {add}")
+    add += 1
+    k.close()
+    f = open(f"D:\\Python\\Games\\Game 1\\Maps\\number.txt", "w")
+    f.write(str(add))
+    f.close()
+
+    with open(f"D:\\Python\\Games\\Game 1\\Maps\\map_{num + 1}", "wb") as f:
+        pickle.dump(m, f)
 
 
-def maps(nom):
-    file = open(F"D:\\Python\\Games\\Game 1\\Maps\\{nom}.txt", "r")
-    a = file.read()
-    b = []
-    for i in a:
-        if i != "]" and i != "[" and i != " " and i != ",":
-            b.append(i)
-    file.close()
-    return b
-
-
-def make(list, w):
-    a = np.array(list)
-    arr = np.reshape(a, (-1, w))
-    arr2 = arr.tolist()
-    for i in range(0, len(arr2)):
-        for y in range(0, len(arr2[i])):
-            arr2[i][y] = int(arr2[i][y])
-    return arr2
+def make(nom):
+    with open(f"D:\\Python\\Games\\Game 1\\Maps\\map_{nom}", "rb") as f:
+        m = pickle.load(f)
+    return m
 
 
 def draw(canvas, walls, images):
@@ -112,7 +103,7 @@ def draw(canvas, walls, images):
 
 
 def change(event):
-    if event.y <= 820:
+    if event.y <= 780 and event.y >= 60 and event.x >= 60 and event.x <= 1860:
         for i in range(0, len(walls)):
             for j in range(0, len(walls[i])):
                 if event.x >= j * 60 and event.x <= (j * 60) + 60 and event.y >= i * 60 and event.y <= (i * 60) + 60:
@@ -133,9 +124,11 @@ canvas = Canvas(tk, width=1920, height=1080)
 canvas.pack()
 fon = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Option\\fon.png")
 
-with open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "r") as f:
-    num = int(f.read())
-    walls = make(maps(num), 32)
+f = open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "r")
+num = int(f.read())
+m = make(num)
+walls = m.walls
+print(f.read())
 
 for x in range(0, len(walls)):
     for y in range(0, len(walls[x])):
@@ -174,4 +167,5 @@ en2 = Entry()
 en2.place(anchor=NW, x=1118, y=900)
 for i in range(150, len(btn) * 200 + 150, 200):
     btn[int((i - 150) / 200)].place(x=i, y=1000)
+f.close()
 tk.mainloop()
