@@ -37,7 +37,7 @@ class Knight(Sprite):
             self.health_nom += 1
         self.ItStand = False
         self.stand_left = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Mob\\ZHero\\ZKnight\\111.png")
-
+        self.stand_right = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Mob\\ZHero\\ZKnight\\121.png")
         self.image = g.canvas.create_image(self.x, self.y, image=self.stand_left)
 
         self.die_images = [
@@ -117,7 +117,10 @@ class Knight(Sprite):
             self.g.canvas.itemconfig(self.image, image=self.attack_right[int(self.frame / 4)])
 
         if int(self.x_dir * self.speed) == 0 and int(self.y_dir * self.speed) == 0:
-            self.g.canvas.itemconfig(self.image, image=self.stand_left)
+            if self.atc_dir <= 0:
+                self.g.canvas.itemconfig(self.image, image=self.stand_left)
+            else:
+                self.g.canvas.itemconfig(self.image, image=self.stand_right)
 
         if self.start_health / 2 >= self.health_nom and self.frame % self.f == 0:
             for i in self.health:

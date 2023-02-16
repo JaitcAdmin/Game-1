@@ -1,6 +1,7 @@
 from tkinter import *
 import pickle
 from Program.map import Map
+from tkinter import messagebox as ms
 
 global color
 color = 5
@@ -84,6 +85,7 @@ def save(w):
     with open(f"D:\\Python\\Games\\Game 1\\Maps\\map_{num + 1}", "wb") as f:
         pickle.dump(m, f)
 
+    ms.askyesno("Program", "Save is complate!Will you wont exit from program?", command=tk.destroy())
 
 def make(nom):
     with open(f"D:\\Python\\Games\\Game 1\\Maps\\map_{nom}", "rb") as f:

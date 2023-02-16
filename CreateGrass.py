@@ -210,7 +210,6 @@ pm = [
     "D:\\Python\\Games\\Game 1\\assets\\Decorations\\d117.png",
     "D:\\Python\\Games\\Game 1\\assets\\Decorations\\d118.png",
     "D:\\Python\\Games\\Game 1\\assets\\Decorations\\d119.png",
-    "D:\\Python\\Games\\Game 1\\assets\\Decorations\\d120.png",
     "D:\\Python\\Games\\Game 1\\assets\\Decorations\\d121.png",
     "D:\\Python\\Games\\Game 1\\assets\\Decorations\\d122.png",
     "D:\\Python\\Games\\Game 1\\assets\\Decorations\\d123.png",

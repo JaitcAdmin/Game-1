@@ -2,7 +2,7 @@ from tkinter import *
 import time
 from tkinter import messagebox
 from knight import Knight
-from map import Map
+from solider import Solider
 import pickle
 
 
@@ -172,7 +172,7 @@ class Main:
             for y in range(0, 14):
                 print(self.grass[y][x])
                 if self.grass[y][x] != 0:
-                    self.canvas.create_image(x * 60, y * 60, image=self.plant[self.grass[y][x]], anchor=NW)
+                    self.canvas.create_image(x * 60 + 30, y * 60 + 30, image=self.plant[self.grass[y][x]])
 
     def load(self):
         print("Начало сохранения")
@@ -183,14 +183,15 @@ class Main:
 try:
     m = Main(2)
     m.draw()
-    k1 = Knight(60, 60, 1, 0, m.FPS, m, 5, m.walls, m.lives)
+    t = "Rpg"
+    k1 = Solider(60, 60, 1, 0, m.FPS, m, 5, m.walls, m.lives, t)
 
     for x in range(0, 32):
         for y in range(0, 14):
             if m.walls[y][x] == 5:
-                k1 = Knight(x * 60 + 25, y * 60 + 25, 1, 0, m.FPS, m, 5, m.walls, m.lives)
+                k1 = Solider(x * 60 + 25, y * 60 + 25, 1, 0, m.FPS, m, 5, m.walls, m.lives, t)
     if k1 is None:
-        k1 = Knight(1200, 400, 1, 0, m.FPS, m, 5, m.walls, 10)
+        k1 = Solider(1200, 400, 1, 0, m.FPS, m, 5, m.walls, 10, t)
 
     m.sprite.append(k1)
 
