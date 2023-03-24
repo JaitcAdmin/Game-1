@@ -3,6 +3,7 @@ class Sprite:
         self.ItStand = False
         self.end = False
         self.fps = fps
+        self.IsFullDie = False
 
     def move(self):
         pass

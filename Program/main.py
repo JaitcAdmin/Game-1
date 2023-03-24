@@ -1,8 +1,9 @@
 from tkinter import *
 import time
-from tkinter import messagebox
+from tkinter import messagebox as ms
 from knight import Knight
-from solider import Solider
+from turrel import Turrel
+from bullet import Bullet
 import pickle
 
 
@@ -22,6 +23,7 @@ class Main:
         self.t = time.time()
 
         self.sprite = []
+        self.enemy = []
         self.walls = [
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4],
             [4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 4],
@@ -58,16 +60,15 @@ class Main:
             m = pickle.load(c)
             self.lives = m.health
             self.walls = m.walls
-            print(m.grasss)
             self.grass = m.grass
-            print(m.grass)
-
+        self.d = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Option\\none.png")
         self.FullEnd = False
         self.images = [PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\grass\\1.png"),
                        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m2.png"),
                        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m3.png"),
                        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m4.png"),
                        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Walls\\2.png"),
+                       PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\grass\\1.png"),
                        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\grass\\1.png")]
         self.plant = [
             PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Decorations\\d11.png"),
@@ -145,12 +146,31 @@ class Main:
 
     def mainloop(self):
         i = -1
+
         while not self.FullEnd:
+            if self.sprite[0].die_frame >= 10:
+                ms.askyesno("Program", "You are die!Will you retry?", command=mains())
             i += 1
-            # if time.time() - self.t >= 100000000000000:
-            #    self.sprite[0].die()
-            #    for i in range(0, len(self.sprite[0].health)):
-            #       self.sprite[0].health.pop(i)
+            if self.sprite[1].x - 500 < self.sprite[0].x < self.sprite[1].x + 500 and self.sprite[1].y - 500 < \
+                    self.sprite[0].y < self.sprite[1].y + 500:
+                self.sprite[1].ToBeStart = True
+            if self.sprite[1].check(self.sprite[0].x, self.sprite[0].y) and not self.sprite[1].IsAttack and self.sprite[
+                2].over and self.sprite[1].IsStart:
+                self.sprite[1].IsAttack = True
+                self.sprite[2] = Bullet(self.sprite[1].x + 30, self.sprite[1].y - 25, self.FPS, self,
+                                        (self.sprite[1].x_check - self.sprite[1].x) / self.sprite[1].dis * 20,
+                                        (self.sprite[1].y_check - self.sprite[1].y) / self.sprite[1].dis * 20,
+                                        self.walls)
+                print("piu2")
+
+            if self.sprite[0].x - 150 < self.sprite[2].x + self.sprite[2].dir_x < self.sprite[0].x + 150 and self.sprite[
+                0].y - 150 < self.sprite[2].y + self.sprite[2].dir_y < self.sprite[0].y + 50:
+                self.sprite[2].IsWorkOut = True
+                if not self.sprite[0].IsFullDie:
+                    for ig in range(1, 2):
+                        print(int(self.sprite[0].health_nom/2))
+                        self.canvas.itemconfig(self.sprite[0].health[int(self.sprite[0].health_nom/2)], image=self.d)
+                        self.sprite[0].health_nom -= (0.25 * (self.lives / 3))
             if len(self.sprite) >= 1:
                 if not self.sprite[i].end:
                     self.sprite[i].move()
@@ -161,6 +181,8 @@ class Main:
                 self.tk.update_idletasks()
                 time.sleep(1 / self.FPS)
 
+            # print(self.sprite[1].check(self.walls, self.sprite[0].x, self.sprite[0].y))
+
     def draw(self):
         self.atp_image = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Option\\fon.png")
         self.apt = self.canvas.create_image(0, 840, image=self.atp_image, anchor=NW)
@@ -170,37 +192,34 @@ class Main:
                 self.canvas.create_image(x * 60, y * 60, image=self.images[self.walls[y][x]], anchor=NW)
         for x in range(0, 32):
             for y in range(0, 14):
-                print(self.grass[y][x])
                 if self.grass[y][x] != 0:
                     self.canvas.create_image(x * 60 + 30, y * 60 + 30, image=self.plant[self.grass[y][x]])
 
-    def load(self):
-        print("Начало сохранения")
-        time.sleep(2)  # To Do #
-        print("Загруска завершина")
 
-
-try:
-    m = Main(2)
+def mains():
+    m = Main(5)
+    print("fkf")
     m.draw()
-    t = "Rpg"
-    k1 = Solider(60, 60, 1, 0, m.FPS, m, 5, m.walls, m.lives, t)
-
+    k1 = Knight(90, 90, 5, 0, m.FPS, m, 1, m.walls, m.lives)
+    b1 = Bullet(1300, 450, m.FPS, m, 10, 0, m.walls)
     for x in range(0, 32):
         for y in range(0, 14):
             if m.walls[y][x] == 5:
-                k1 = Solider(x * 60 + 25, y * 60 + 25, 1, 0, m.FPS, m, 5, m.walls, m.lives, t)
+                k1 = Knight(x * 60 + 25, y * 60 + 25, 1, 0, m.FPS, m, 5, m.walls, m.lives)
     if k1 is None:
-        k1 = Solider(1200, 400, 1, 0, m.FPS, m, 5, m.walls, 10, t)
-
+        k1 = Knight(1200, 400, 1, 0, m.FPS, m, 5, m.walls, 10)
     m.sprite.append(k1)
-
+    for x in range(0, 32):
+        for y in range(0, 14):
+            if m.walls[y][x] == 6:
+                a = Turrel(x * 60 + 25, y * 60 + 25, m.FPS, m, m.FPS)
+                m.enemy.append(a)
+                m.sprite.append(a)
+    m.sprite.append(b1)
 
     def motion1(event):
         if event.y <= 840:
             k1.create_purpose(event.x, event.y)
-            print("c")
-
 
     def motion2(event):
         if event.x >= k1.x:
@@ -209,21 +228,27 @@ try:
             k1.atc_dir = -1
         k1.attack()
 
+    def motion3(event):
+        m.sprite[2].IsWorkOut = True
 
     m.tk.bind('<Button-1>', motion1)
+    m.tk.bind('<Button-2>', motion3)
     m.tk.bind('<Button-3>', motion2)
     m.tk.bind('<Escape>', lambda e: m.tk.destroy())
     m.mainloop()
-except TclError:
-    exit(2)
-else:
-    ms = messagebox
-    ms.showerror("Пиратская техналогия!",
-                 ("Зафиксирована попытка исследования \n" +
-                  " программы или её служебных данных! \n" +
-                  " Любознательным народным умельцам \n" +
-                  " и даже будущему программисту Васе, \n" +
-                  " рекомендуется бросить эту вонючую \n"
-                  " затею и позвони на телефон поддержки!!!"))
+
+
+# except TclError:
+#    exit(2)
+# else:
+#    ms = messagebox
+#    ms.showerror("Пиратская техналогия!",
+#                 ("Зафиксирована попытка исследования \n" +
+#                  " программы или её служебных данных! \n" +
+#                  " Любознательным народным умельцам \n" +
+#                  " и даже будущему программисту Васе, \n" +
+#                  " рекомендуется бросить эту вонючую \n"
+#                  " затею и позвони на телефон поддержки!!!"))
 
 # Hello GitHub
+mains()

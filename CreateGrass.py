@@ -115,7 +115,8 @@ images = [
     PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m3.png"),
     PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m4.png"),
     PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Walls\\2.png"),
-    PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m6.png")
+    PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m6.png"),
+    PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Mob\\ZHero\\ZTurrel\\0.png")
 ]
 draw(canvas, walls, images)
 plant = [

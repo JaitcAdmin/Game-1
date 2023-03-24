@@ -1,6 +1,7 @@
 from tkinter import *
 from sprite import Sprite
 import time
+import random
 
 
 class Knight(Sprite):
@@ -28,6 +29,7 @@ class Knight(Sprite):
         self.y_dir = dir_y
         self.speed = speed
         self.g = g
+        self.die_time = time.time()
         self.health = []
         self.start_health_line = 100
         self.finish_health_line = 580
@@ -136,8 +138,10 @@ class Knight(Sprite):
         if self.IsStartDie:
             self.g.canvas.itemconfig(self.image, image=self.die_images[3])
             if not self.IsFullDie:
-                if time.time() - self.time <= 1:
+                if time.time() >= self.die_time + 0.2:
                     self.die_frame += 1
+                    self.die_time = time.time()
+                    print(int(self.die_time))
 
                 if self.die_frame <= 0:
                     self.g.canvas.itemconfig(self.image, image=self.die_images[0])
@@ -148,8 +152,11 @@ class Knight(Sprite):
                 elif self.die_frame >= 3:
                     self.g.canvas.itemconfig(self.image, image=self.die_images[3])
 
-                if self.die_frame >= 8:
+                if self.die_frame >= 5:
                     self.IsFullDie = True
+            else:
+                print("k")
+                self.dead()
         if self.ItAttack:
             if self.atc_dir < 0:
                 if self.atc_frame <= 0:
@@ -293,3 +300,6 @@ class Knight(Sprite):
         self.atc_dir = self.x_dir
         self.CoordOfPurpose[0] = x_pur
         self.CoordOfPurpose[1] = y_pur
+
+    def dead(self):
+        self.g.canvas.create_text(900, 500, text="You are dead", font=("Purisa", 100), fill="red")

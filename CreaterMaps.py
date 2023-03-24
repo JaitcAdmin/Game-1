@@ -4,7 +4,7 @@ from Program.map import Map
 from tkinter import messagebox as ms
 
 global color
-color = 5
+color = 0
 global lives
 lives = 10
 global name
@@ -51,22 +51,20 @@ def get_brick():
     color = 4
 
 
-def get_spawnpoint(bol1=bol):
+def get_spawnpoint():
     global color
     color = 5
     btn[6].place(x=2000, y=2000)
+    btn[9].place(x=1370, y=1000)
     walls[0][0] = 4
 
 
-def save(w):
-    a = " "
-    for i in w:
-        a += "["
-        for y in range(0, len(i)):
-            a += str(i[y])
-            if y <= len(i) - 2:
-                a += ", "
-        a += "] "
+def get_robot():
+    global color
+    color = 6
+
+
+def save():
     walls[0][0] = 4
     draw(canvas, walls, images)
     m = Map(3)
@@ -85,7 +83,8 @@ def save(w):
     with open(f"D:\\Python\\Games\\Game 1\\Maps\\map_{num + 1}", "wb") as f:
         pickle.dump(m, f)
 
-    ms.askyesno("Program", "Save is complate!Will you wont exit from program?", command=tk.destroy())
+    ms.askyesno("Program", "Save is complate!Will you exit from program?", command=tk.destroy())
+
 
 def make(nom):
     with open(f"D:\\Python\\Games\\Game 1\\Maps\\map_{nom}", "rb") as f:
@@ -97,7 +96,14 @@ def draw(canvas, walls, images):
     canvas.create_image(0, 840, image=fon, anchor=NW)
     for x in range(0, len(walls)):
         for y in range(0, len(walls[x])):
-            canvas.create_image(y * 60, x * 60, image=images[walls[x][y]], anchor=NW)
+            if walls[x][y] == 5:
+                canvas.create_image(y * 60 + 90, x * 60 + 60, image=images[5], anchor=SE)
+                get_grass()
+            elif walls[x][y] == 6:
+                canvas.create_image(y * 60 + 10, x * 60 + 10, image=images[6], anchor=NW)
+            else:
+                canvas.create_image(y * 60, x * 60, image=images[walls[x][y]], anchor=NW)
+
     for x in range(0, len(walls)):
         for y in range(0, len(walls[x])):
             canvas.create_line(y * 60, 0, y * 60, 840)
@@ -113,61 +119,78 @@ def change(event):
                     if color == 5:
                         canvas.create_image(j * 60 + 90, i * 60 + 60, image=images[5], anchor=SE)
                         get_grass()
+                    elif color == 6:
+                        canvas.create_image(j * 60 + 10, i * 60 + 10, image=images[6], anchor=NW)
                     else:
                         canvas.create_image(j * 60, i * 60, image=images[color], anchor=NW)
                     canvas.create_line(j * 60, 0, j * 60, 840)
                     canvas.create_line(0, i * 60, 1920, i * 60)
 
 
-tk = Tk()
-tk.attributes("-topmost", True)
-tk.attributes('-fullscreen', True)
-canvas = Canvas(tk, width=1920, height=1080)
-canvas.pack()
-fon = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Option\\fon.png")
+def main1():
+    global canvas
+    global fon
+    global tk
+    global walls
+    global images
+    global num
+    global btn
+    global en1
+    global en2
+    tk = Tk()
+    tk.attributes("-topmost", True)
+    tk.attributes('-fullscreen', True)
+    canvas = Canvas(tk, width=1920, height=1080)
+    canvas.pack()
+    fon = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Option\\fon.png")
 
-f = open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "r")
-num = int(f.read())
-m = make(num)
-walls = m.walls
-print(f.read())
+    f = open("D:\\Python\\Games\\Game 1\\Maps\\number.txt", "r")
+    num = int(f.read())
+    m = make(num)
+    walls = m.walls
+    print(f.read())
 
-for x in range(0, len(walls)):
-    for y in range(0, len(walls[x])):
-        walls[x][y] = 4
-for x in range(1, len(walls) - 1):
-    for y in range(1, len(walls[x]) - 1):
-        walls[x][y] = 0
+    for x in range(0, len(walls)):
+        for y in range(0, len(walls[x])):
+            walls[x][y] = 4
+    for x in range(1, len(walls) - 1):
+        for y in range(1, len(walls[x]) - 1):
+            walls[x][y] = 0
 
-images = [
-    PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\grass\\1.png"),
-    PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m2.png"),
-    PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m3.png"),
-    PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m4.png"),
-    PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Walls\\2.png"),
-    PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m6.png")
-]
+    images = [
+        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\grass\\1.png"),
+        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m2.png"),
+        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m3.png"),
+        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m4.png"),
+        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Walls\\2.png"),
+        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Maps\\m6.png"),
+        PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Mob\\ZHero\\ZTurrel\\0.png")
+    ]
 
-tk.bind_all("<Button-1>", change)
-tk.bind('<Escape>', lambda e: tk.destroy())
+    tk.bind_all("<Button-1>", change)
+    tk.bind('<Escape>', lambda e: tk.destroy())
 
-draw(canvas, walls, images)
-btn = [
-    Button(tk, text="Трава", command=lambda: get_grass()),
-    Button(tk, text="Песок", command=lambda: get_send()),
-    Button(tk, text="Снег", command=lambda: get_snow()),
-    Button(tk, text="Лава", command=lambda: get_lava()),
-    Button(tk, text="Стена", command=lambda: get_brick()),
-    Button(tk, text="Название", command=lambda: get_name()),
-    Button(tk, text="Спавн поинт", command=lambda: get_spawnpoint()),
-    Button(tk, text="Кол-во жизней", command=lambda: get_lives()),
-    Button(tk, text="Сохранить", command=lambda: save(walls))
-]
-en1 = Entry()
-en1.place(anchor=NW, x=1533, y=900)
-en2 = Entry()
-en2.place(anchor=NW, x=1118, y=900)
-for i in range(150, len(btn) * 200 + 150, 200):
-    btn[int((i - 150) / 200)].place(x=i, y=1000)
-f.close()
-tk.mainloop()
+    draw(canvas, walls, images)
+    btn = [
+        Button(tk, text="Трава", command=lambda: get_grass()),
+        Button(tk, text="Песок", command=lambda: get_send()),
+        Button(tk, text="Снег", command=lambda: get_snow()),
+        Button(tk, text="Лава", command=lambda: get_lava()),
+        Button(tk, text="Стена", command=lambda: get_brick()),
+        Button(tk, text="Название", command=lambda: get_name()),
+        Button(tk, text="Спавн поинт", command=lambda: get_spawnpoint()),
+        Button(tk, text="Кол-во жизней", command=lambda: get_lives()),
+        Button(tk, text="Сохранить", command=lambda: save()),
+        Button(tk, text="Робот", command=lambda: get_robot())
+    ]
+    en1 = Entry()
+    en1.place(anchor=NW, x=1533, y=900)
+    en2 = Entry()
+    en2.place(anchor=NW, x=1118, y=900)
+    for i in range(150, len(btn) * 200 + 150, 200):
+        btn[int((i - 150) / 200)].place(x=i, y=1000)
+    f.close()
+    tk.mainloop()
+
+
+main1()
