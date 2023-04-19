@@ -5,6 +5,8 @@ from knight import Knight
 from turrel import Turrel
 from bullet import Bullet
 import pickle
+import random
+
 
 
 class Main:
@@ -154,22 +156,24 @@ class Main:
             if self.sprite[1].x - 500 < self.sprite[0].x < self.sprite[1].x + 500 and self.sprite[1].y - 500 < \
                     self.sprite[0].y < self.sprite[1].y + 500:
                 self.sprite[1].ToBeStart = True
-            if self.sprite[1].check(self.sprite[0].x, self.sprite[0].y) and not self.sprite[1].IsAttack and self.sprite[
-                2].over and self.sprite[1].IsStart:
+            if self.sprite[1].check(self.sprite[0].x, self.sprite[0].y) and not self.sprite[1].IsAttack and \
+                    self.sprite[
+                        2].over and self.sprite[1].IsStart:
                 self.sprite[1].IsAttack = True
                 self.sprite[2] = Bullet(self.sprite[1].x + 30, self.sprite[1].y - 25, self.FPS, self,
-                                        (self.sprite[1].x_check - self.sprite[1].x) / self.sprite[1].dis * 20,
-                                        (self.sprite[1].y_check - self.sprite[1].y) / self.sprite[1].dis * 20,
+                                        (self.sprite[1].x_check - self.sprite[1].x) / self.sprite[1].dis * 10,
+                                        (self.sprite[1].y_check - self.sprite[1].y) / self.sprite[1].dis * 10,
                                         self.walls)
-                print("piu2")
+            print("piu2")
 
-            if self.sprite[0].x - 150 < self.sprite[2].x + self.sprite[2].dir_x < self.sprite[0].x + 150 and self.sprite[
-                0].y - 150 < self.sprite[2].y + self.sprite[2].dir_y < self.sprite[0].y + 50:
+            if self.sprite[0].x - 30 < self.sprite[2].x + self.sprite[2].dir_x < self.sprite[0].x + 30 and \
+                    self.sprite[0].y - 30 < self.sprite[2].y + self.sprite[2].dir_y < self.sprite[0].y + 30:
                 self.sprite[2].IsWorkOut = True
                 if not self.sprite[0].IsFullDie:
                     for ig in range(1, 2):
-                        print(int(self.sprite[0].health_nom/2))
-                        self.canvas.itemconfig(self.sprite[0].health[int(self.sprite[0].health_nom/2)], image=self.d)
+                        print(int(self.sprite[0].health_nom / 2))
+                        self.canvas.itemconfig(self.sprite[0].health[int(self.sprite[0].health_nom / 2) * -1],
+                                               image=self.d)
                         self.sprite[0].health_nom -= (0.25 * (self.lives / 3))
             if len(self.sprite) >= 1:
                 if not self.sprite[i].end:
@@ -181,7 +185,7 @@ class Main:
                 self.tk.update_idletasks()
                 time.sleep(1 / self.FPS)
 
-            # print(self.sprite[1].check(self.walls, self.sprite[0].x, self.sprite[0].y))
+        # print(self.sprite[1].check(self.walls, self.sprite[0].x, self.sprite[0].y))
 
     def draw(self):
         self.atp_image = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Option\\fon.png")
@@ -197,11 +201,11 @@ class Main:
 
 
 def mains():
-    m = Main(5)
+    m = Main(4)
     print("fkf")
     m.draw()
     k1 = Knight(90, 90, 5, 0, m.FPS, m, 1, m.walls, m.lives)
-    b1 = Bullet(1300, 450, m.FPS, m, 10, 0, m.walls)
+    b1 = Bullet(1800, 250, m.FPS, m, 5, 0, m.walls)
     for x in range(0, 32):
         for y in range(0, 14):
             if m.walls[y][x] == 5:

@@ -26,7 +26,7 @@ class Enemy(Sprite):
         x = self.x
         y = self.y
         self.dis = (((target_y - y) ** 2) + ((target_x - x) ** 2)) ** 0.5
-        target_y = target_y + ((int(random.random() * 7)+2))*15
+        target_y = target_y + random.randint(0, 55)
         if x > target_x:
             max_x = x
             min_x = target_x

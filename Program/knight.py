@@ -38,6 +38,7 @@ class Knight(Sprite):
             self.health.append(self.g.canvas.create_image(i, 960, image=self.texture_heads[0]))
             self.health_nom += 1
         self.ItStand = False
+        self.ggg = 0
         self.stand_left = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Mob\\ZHero\\ZKnight\\111.png")
         self.stand_right = PhotoImage(file="D:\\Python\\Games\\Game 1\\assets\\Mob\\ZHero\\ZKnight\\121.png")
         self.image = g.canvas.create_image(self.x, self.y, image=self.stand_left)
@@ -154,10 +155,7 @@ class Knight(Sprite):
 
                 if self.die_frame >= 5:
                     self.IsFullDie = True
-            else:
-                print("k")
-                self.dead()
-        if self.ItAttack:
+        if self.ItAttack and not self.IsStartDie:
             if self.atc_dir < 0:
                 if self.atc_frame <= 0:
                     self.g.canvas.itemconfig(self.image, image=self.attack_left[0])
@@ -300,6 +298,3 @@ class Knight(Sprite):
         self.atc_dir = self.x_dir
         self.CoordOfPurpose[0] = x_pur
         self.CoordOfPurpose[1] = y_pur
-
-    def dead(self):
-        self.g.canvas.create_text(900, 500, text="You are dead", font=("Purisa", 100), fill="red")

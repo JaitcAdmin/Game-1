@@ -69,7 +69,7 @@ class Turrel(Enemy):
             if self.dir >= 0:
                 self.canvas.itemconfig(self.image, image=self.images_attack_right[self.frame])
             if self.dir < 0:
-                self.canvas.itemconfig(self.image, image=self.images_attack_right[self.frame])
+                self.canvas.itemconfig(self.image, image=self.images_attack_left[self.frame])
             self.frame += 1
             if self.frame >= len(self.images_attack_left):
                 self.frame = 0
