@@ -9,7 +9,7 @@ class Map:
         self.m = m
         self.string = string
         self.map = []
-        self.s = [1, 2]
+        self.s = [5, 3]
         self.n = 100
         self.mmcdcfs = 0
         self.Is = 0
@@ -37,10 +37,9 @@ class Map:
 
     def control(self, i):
         self.r = int(random.random() * 2)
-        self.f_p_x = int(random.random() * (10-i)) + i
-        self.f_p_y = int(random.random() * (10-i)) + i
+        self.f_p_x = int(random.random() * (10 - i))
+        self.f_p_y = int(random.random() * (10 - i))
         return True
-
 
     def random(self):
         if not self.m.f:
@@ -53,14 +52,20 @@ class Map:
                 self.map.append(mmm)
             for i in self.s:
                 if self.control(i):
-                    for y in range(0, i):
-                        if self.map[self.f_p_x + y * self.r][self.f_p_y + y * (1 - self.r)] == 0:
-                            self.map[self.f_p_x + y * self.r][self.f_p_y + y * (1 - self.r)] = 1
-                for xg in range(self.f_p_x - 1, self.f_p_x + (i * self.r) + 1):
-                    for yg in range(self.f_p_y - 1, (self.f_p_y + (i * (1 - self.r))) + 1):
-                        print(yg, "   ", xg)
-                        if self.map[yg][xg] != 1:
-                            self.map[yg][xg] = 2
+                    try:
+                        print(f"r= {self.r} len(s)={self.string}")
+                        for y in range(0, i):
+                            self.map[self.f_p_x + (y * self.r)][self.f_p_y + y * (1 - self.r)] = 1
+
+
+                        for xg in range(self.f_p_x - 1, self.f_p_x + (i * self.r) + 1 * (1 - self.r) + 1):
+                            for yg in range(self.f_p_y - 1, (self.f_p_y + (i * (1 - self.r)) + 1 * self.r) + 1):
+                                # print(self.f_p_x, "   ", self.f_p_y)
+                                if self.map[xg][yg] != 1:
+                                    self.map[xg][yg] = 2
+
+                    except(IndexError):
+                        pass
 
     def draw(self):
         for x in range(0, len(self.map)):
@@ -90,7 +95,7 @@ class Map:
                     self.map[int(y / 50) - 1][int((x - self.x_p) / 50) - 1] = 2
                 else:
                     tk.destroy()
-                    print(self.string)
+                    # print(self.string)
             elif self.map[int(y / 50) - 1][int((x - self.x_p) / 50) - 1] != 1 != 3:
                 canvas.create_rectangle(int((x - self.x_p) / 50) * 50 + self.x_p, int(y / 50) * 50,
                                         int((x - self.x_p) / 50) * 50 + 50 + self.x_p,
