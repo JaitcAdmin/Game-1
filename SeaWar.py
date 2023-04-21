@@ -9,10 +9,11 @@ class Map:
         self.m = m
         self.string = string
         self.map = []
-        self.s = [5, 3]
+        self.s = [1, 1, 1, 2, 2, 3, 4]
         self.n = 100
         self.mmcdcfs = 0
         self.Is = 0
+        self.b = 0
         for i in self.s:
             self.Is += i
 
@@ -39,6 +40,14 @@ class Map:
         self.r = int(random.random() * 2)
         self.f_p_x = int(random.random() * (10 - i))
         self.f_p_y = int(random.random() * (10 - i))
+        for j in range(0, i):
+            if (self.map[self.f_p_x + j * self.r][self.f_p_y + j * (1 - self.r)] == 1 or
+                    self.map[self.f_p_x + j * self.r][self.f_p_y + j * (1 - self.r)] == 2):
+                if self.b <= 90:
+                    self.control(i)
+                    self.b += 1
+                else:
+                    return False
         return True
 
     def random(self):
@@ -56,7 +65,6 @@ class Map:
                         print(f"r= {self.r} len(s)={self.string}")
                         for y in range(0, i):
                             self.map[self.f_p_x + (y * self.r)][self.f_p_y + y * (1 - self.r)] = 1
-
 
                         for xg in range(self.f_p_x - 1, self.f_p_x + (i * self.r) + 1 * (1 - self.r) + 1):
                             for yg in range(self.f_p_y - 1, (self.f_p_y + (i * (1 - self.r)) + 1 * self.r) + 1):
@@ -79,9 +87,6 @@ class Map:
                 elif self.map[x][y] == 5:
                     canvas.create_rectangle(self.x_p + x * 50 + 50, y * 50 + 50, self.x_p + x * 50 + 100, y * 50 + 100,
                                             fill="red")
-                elif self.map[x][y] == 2:
-                    canvas.create_rectangle(self.x_p + x * 50 + 50, y * 50 + 50, self.x_p + x * 50 + 100, y * 50 + 100,
-                                            fill="green")
 
     def attack(self, x, y):
         self.f = True
@@ -92,30 +97,34 @@ class Map:
                                         int(y / 50) * 50 + 50, fill="red")
                 if self.Is > 1:
                     self.Is -= 1
-                    self.map[int(y / 50) - 1][int((x - self.x_p) / 50) - 1] = 2
+                    self.map[int(y / 50) - 1][int((x - self.x_p) / 50) - 1] = 3
                 else:
                     tk.destroy()
-                    # print(self.string)
-            elif self.map[int(y / 50) - 1][int((x - self.x_p) / 50) - 1] != 1 != 3:
+                    print(self.string)
+            elif self.map[int(y / 50) - 1][int((x - self.x_p) / 50) - 1] != 1 != 3 != 4:
                 canvas.create_rectangle(int((x - self.x_p) / 50) * 50 + self.x_p, int(y / 50) * 50,
                                         int((x - self.x_p) / 50) * 50 + 50 + self.x_p,
                                         int(y / 50) * 50 + 50, fill="blue")
                 self.map[int(y / 50) - 1][int((x - self.x_p) / 50) - 1] = 3
-                self.generate_attack(self.m)
+                self.generate_attack(self.m, int(random.random() * 10), int(random.random() * 10))
 
-    def generate_attack(self, m):
+    def generate_attack(self, m, x, y):
         self.mmcdcfs += 1
-        a = int(random.random() * (100 - self.mmcdcfs))
-        print("piu", self.mmcdcfs, " ", int(a % 10) + 1, " / ", int(a / 10) + 1)
+        a = x * 10 + y
 
-        if m.map[int(a / 10)][int(a % 10)] != 1:
+        if m.map[int(a / 10)][int(a % 10)] == 0 or m.map[int(a / 10)][int(a % 10)] == 2:
             m.map[int(a / 10)][int(a % 10)] = 3
             canvas.create_rectangle(m.x_p + int(a / 10) * 50 + 50, int(a % 10) * 50 + 50,
                                     m.x_p + int(a / 10) * 50 + 100, int(a % 10) * 50 + 100, fill="blue")
-        else:
+        elif m.map[int(a / 10)][int(a % 10)] == 1:
             canvas.create_rectangle(m.x_p + int(a / 10) * 50 + 50, int(a % 10) * 50 + 50,
                                     m.x_p + int(a / 10) * 50 + 100, int(a % 10) * 50 + 100, fill="red")
-            m.Is -= 1
+            if m.Is > 1:
+                m.Is -= 1
+                m.map[int(a / 10)][int(a % 10)] = 3
+            else:
+                tk.destroy()
+                # print(m.string)
             self.second_attack(int(a / 10), int(a % 10))
 
     def q(self):
@@ -123,10 +132,12 @@ class Map:
         self.draw()
 
     def second_attack(self, x, y):
-        xf = int(random.random() * 2)
-        yf = int(random.random() * 2)
-        if (1 - xf) * x >= 0 and (1 - yf) * y >= 0 and (1 - yf) * y <= 10 and (1 - yf) * y <= 10:
-            self.attack((1 - xf) * x, (1 - yf) * y)
+        # print(f"{self.string}  {int(x)} / {int(y)}")
+
+        xf = int(random.random() * 3) - 1
+        yf = int(random.random() * 3) - 1
+        self.generate_attack(self.m, x + xf + 1, y + yf + 1)
+        # print(f"{x+1} + {xf} = {x+xf+1} / {y+yf+1} = {y+1} + {yf}")
 
 
 def atc(event):
